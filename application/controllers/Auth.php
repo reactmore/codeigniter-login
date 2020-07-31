@@ -1,16 +1,15 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
- * Class Auth
- * @property Ion_auth|Ion_auth_model $ion_auth        The ION Auth spark
- * @property CI_Form_validation      $form_validation The form validation library
- */
+* Class Auth
+* @property Ion_auth|Ion_auth_model $ion_auth        The ION Auth spark
+* @property CI_Form_validation      $form_validation The form validation library
+*/
 class Auth extends CI_Controller
 {
   public $data = [];
 
-  public function __construct()
-  {
+  public function __construct() {
     parent::__construct();
     $this->load->database();
 
@@ -20,10 +19,9 @@ class Auth extends CI_Controller
   }
 
   /**
-   * Redirect if needed, otherwise display the user list
-   */
-  public function index()
-  {
+  * Redirect if needed, otherwise display the user list
+  */
+  public function index() {
 
     if (!$this->ion_auth->logged_in()) {
       // redirect them to the login page
@@ -53,10 +51,9 @@ class Auth extends CI_Controller
   }
 
   /**
-   * Log the user in
-   */
-  public function login()
-  {
+  * Log the user in
+  */
+  public function login() {
     $this->data['title'] = $this->lang->line('login_heading');
 
     if ($this->ion_auth->logged_in() || $this->ion_auth->is_admin()) {
@@ -78,7 +75,8 @@ class Auth extends CI_Controller
         //redirect them back to the home page
 
         $this->session->set_flashdata('message', $this->ion_auth->messages());
-        redirect('/', 'refresh');
+        redirect('admin_controller', 'refresh');
+
       } else {
         // if the login was un-successful
         // redirect them back to the login page
@@ -112,10 +110,9 @@ class Auth extends CI_Controller
   }
 
   /**
-   * Log the user out
-   */
-  public function logout()
-  {
+  * Log the user out
+  */
+  public function logout() {
     $this->data['title'] = "Logout";
 
     // log the user out
@@ -126,10 +123,9 @@ class Auth extends CI_Controller
   }
 
   /**
-   * Change password
-   */
-  public function change_password()
-  {
+  * Change password
+  */
+  public function change_password() {
     $this->form_validation->set_rules('old', $this->lang->line('change_password_validation_old_password_label'), 'required');
     $this->form_validation->set_rules('new', $this->lang->line('change_password_validation_new_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[new_confirm]');
     $this->form_validation->set_rules('new_confirm', $this->lang->line('change_password_validation_new_password_confirm_label'), 'required');
@@ -189,10 +185,9 @@ class Auth extends CI_Controller
   }
 
   /**
-   * Forgot password
-   */
-  public function forgot_password()
-  {
+  * Forgot password
+  */
+  public function forgot_password() {
     $this->data['title'] = $this->lang->line('forgot_password_heading');
 
     // setting validation rules by checking whether identity is username or email
@@ -238,7 +233,8 @@ class Auth extends CI_Controller
       }
 
       // run the forgotten password method to email an activation code to the user
-      $forgotten = $this->ion_auth->forgotten_password($identity->{$this->config->item('identity', 'ion_auth')});
+      $forgotten = $this->ion_auth->forgotten_password($identity-> {
+        $this->config->item('identity', 'ion_auth')});
 
       if ($forgotten) {
         // if there were no errors
@@ -252,12 +248,11 @@ class Auth extends CI_Controller
   }
 
   /**
-   * Reset password - final step for forgotten password
-   *
-   * @param string|null $code The reset code
-   */
-  public function reset_password($code = NULL)
-  {
+  * Reset password - final step for forgotten password
+  *
+  * @param string|null $code The reset code
+  */
+  public function reset_password($code = NULL) {
     if (!$code) {
       show_404();
     }
@@ -303,7 +298,8 @@ class Auth extends CI_Controller
         // render
         $this->_render_page('auth' . DIRECTORY_SEPARATOR . 'reset_password', $this->data);
       } else {
-        $identity = $user->{$this->config->item('identity', 'ion_auth')};
+        $identity = $user-> {
+          $this->config->item('identity', 'ion_auth')};
 
         // do we have a valid request?
         if ($this->_valid_csrf_nonce() === FALSE || $user->id != $this->input->post('user_id')) {
@@ -334,13 +330,12 @@ class Auth extends CI_Controller
   }
 
   /**
-   * Activate the user
-   *
-   * @param int         $id   The user ID
-   * @param string|bool $code The activation code
-   */
-  public function activate($id, $code = FALSE)
-  {
+  * Activate the user
+  *
+  * @param int         $id   The user ID
+  * @param string|bool $code The activation code
+  */
+  public function activate($id, $code = FALSE) {
     $activation = FALSE;
 
     if ($code !== FALSE) {
@@ -361,12 +356,11 @@ class Auth extends CI_Controller
   }
 
   /**
-   * Deactivate the user
-   *
-   * @param int|string|null $id The user ID
-   */
-  public function deactivate($id = NULL)
-  {
+  * Deactivate the user
+  *
+  * @param int|string|null $id The user ID
+  */
+  public function deactivate($id = NULL) {
     if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin()) {
       // redirect them to the home page because they must be an administrator to view this
       show_error('You must be an administrator to view this page.');
@@ -406,10 +400,9 @@ class Auth extends CI_Controller
 
 
   /**
-   * Create a new user
-   */
-  public function register()
-  {
+  * Create a new user
+  */
+  public function register() {
     $this->data['title'] = $this->lang->line('create_user_heading');
 
     if ($this->ion_auth->logged_in()) {
@@ -510,10 +503,9 @@ class Auth extends CI_Controller
   }
 
   /**
-   * Create a new user
-   */
-  public function create_user()
-  {
+  * Create a new user
+  */
+  public function create_user() {
     $this->data['title'] = $this->lang->line('create_user_heading');
 
     if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin()) {
@@ -613,10 +605,9 @@ class Auth extends CI_Controller
     }
   }
   /**
-   * Redirect a user checking if is admin
-   */
-  public function redirectUser()
-  {
+  * Redirect a user checking if is admin
+  */
+  public function redirectUser() {
     if ($this->ion_auth->is_admin()) {
       redirect('auth', 'refresh');
     }
@@ -624,12 +615,11 @@ class Auth extends CI_Controller
   }
 
   /**
-   * Edit a user
-   *
-   * @param int|string $id
-   */
-  public function edit_user($id)
-  {
+  * Edit a user
+  *
+  * @param int|string $id
+  */
+  public function edit_user($id) {
     $this->data['title'] = $this->lang->line('edit_user_heading');
 
     if (!$this->ion_auth->logged_in() || (!$this->ion_auth->is_admin() && !($this->ion_auth->user()->row()->id == $id))) {
@@ -751,10 +741,9 @@ class Auth extends CI_Controller
   }
 
   /**
-   * Create a new group
-   */
-  public function create_group()
-  {
+  * Create a new group
+  */
+  public function create_group() {
     $this->data['title'] = $this->lang->line('create_group_title');
 
     if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin()) {
@@ -797,12 +786,11 @@ class Auth extends CI_Controller
   }
 
   /**
-   * Edit a group
-   *
-   * @param int|string $id
-   */
-  public function edit_group($id)
-  {
+  * Edit a group
+  *
+  * @param int|string $id
+  */
+  public function edit_group($id) {
     // bail if no group id given
     if (!$id || empty($id)) {
       redirect('auth', 'refresh');
@@ -861,10 +849,9 @@ class Auth extends CI_Controller
   }
 
   /**
-   * @return array A CSRF key-value pair
-   */
-  public function _get_csrf_nonce()
-  {
+  * @return array A CSRF key-value pair
+  */
+  public function _get_csrf_nonce() {
     $this->load->helper('string');
     $key = random_string('alnum', 8);
     $value = random_string('alnum', 20);
@@ -875,10 +862,9 @@ class Auth extends CI_Controller
   }
 
   /**
-   * @return bool Whether the posted CSRF token matches
-   */
-  public function _valid_csrf_nonce()
-  {
+  * @return bool Whether the posted CSRF token matches
+  */
+  public function _valid_csrf_nonce() {
     $csrfkey = $this->input->post($this->session->flashdata('csrfkey'));
     if ($csrfkey && $csrfkey === $this->session->flashdata('csrfvalue')) {
       return TRUE;
@@ -887,12 +873,12 @@ class Auth extends CI_Controller
   }
 
   /**
-   * @param string     $view
-   * @param array|null $data
-   * @param bool       $returnhtml
-   *
-   * @return mixed
-   */
+  * @param string     $view
+  * @param array|null $data
+  * @param bool       $returnhtml
+  *
+  * @return mixed
+  */
   public function _render_page($view, $data = NULL, $returnhtml = FALSE) //I think this makes more sense
   {
 

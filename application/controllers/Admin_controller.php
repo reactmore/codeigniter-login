@@ -5,10 +5,9 @@ class Admin_controller extends Admin_Core_Controller
 {
 
 
-  public function index()
-  {
+  public function index() {
     $data['active'] = 'active';
 
-    $this->template->load('template', 'index', $data);
+    $this->template->load('include/index', 'index', $data);
   }
 }

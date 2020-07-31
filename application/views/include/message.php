@@ -3,13 +3,25 @@
 <script src="<?= base_url('assets/admin/modules/'); ?>sweetalert/sweetalert.min.js"></script>
 
 <script type="text/javascript">
-    <?php if ($this->session->flashdata('message')) { ?>
-        swal('Cool', '<?php echo $message_success; ?>', 'success');
-    <?php } else if ($this->session->flashdata('errors')) {  ?>
-        swal('Sorry', '<?php echo $message_errors; ?>', 'error');
-    <?php } else if ($this->session->flashdata('warning')) {  ?>
-        toastr.warning("<?php echo $this->session->flashdata('warning'); ?>");
-    <?php } else if ($this->session->flashdata('info')) {  ?>
-        toastr.info("<?php echo $this->session->flashdata('info'); ?>");
-    <?php } ?>
+  <?php if ($this->session->flashdata('message')) {
+    ?>
+    swal('Cool', '<?php echo $message_success; ?>', 'success');
+    <?php
+  } else if ($this->session->flashdata('errors')) {
+    ?>
+    swal('Sorry', '<?php echo $message_errors; ?>', 'error');
+    <?php
+  } else if ($this->session->flashdata('warning')) {
+    ?>
+    toastr.warning("<?php echo $this->session->flashdata('warning'); ?>");
+    <?php
+  } else if ($this->session->flashdata('info')) {
+    ?>
+    toastr.info("<?php echo $this->session->flashdata('info'); ?>");
+    <?php
+  } else if ($message_success == true) {
+    ?>
+    swal('Cool', '<?php echo $message_success; ?>', 'success');
+    <?php
+  } ?>
 </script>
